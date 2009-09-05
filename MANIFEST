@@ -2,8 +2,10 @@ Build.PL
 Changes
 lib/Test/XPath.pm
 MANIFEST			This list of files
+META.yml
 README
 t/atom.xml
+t/blocks.t
 t/ex.t
 t/menu.xml
 t/pod.t
@@ -12,4 +14,3 @@ t/strongrrl.html
 t/xhtml.t
 t/xmlns.t
 t/xpath.t
-META.yml

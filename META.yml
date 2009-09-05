@@ -1,6 +1,6 @@
 ---
 name: Test-XPath
-version: 0.11
+version: 0.12
 author: []
 abstract: Test XML and HTML content and structure with XPath expressions
 license: perl
@@ -24,7 +24,7 @@ configure_requires:
 provides:
   Test::XPath:
     file: lib/Test/XPath.pm
-    version: 0.11
+    version: 0.12
 generated_by: Module::Build version 0.35
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html

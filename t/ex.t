@@ -5,6 +5,7 @@ use File::Spec::Functions 'catfile';
 
 # Synopsis.
 
+#  use Test::More tests => 28; # Use when PerlX::MethodCallWithBlock tests uncommented.
   use Test::More tests => 22;
   use Test::XPath;
 
@@ -33,6 +34,13 @@ XML
       shift->is( './@src', $css, "Style src should be $css");
   }, 'Should have style' );
 
+  # Better yet, use PerlX::MethodCallWithBlock:
+  # @css = qw(foo.css bar.css);
+  # use PerlX::MethodCallWithBlock;
+  # $tx->ok( '/html/head/style[@type="text/css"]', 'Should have style' ) {
+  #     my $css = shift @css;
+  #     shift->is( './@src', $css, "Style src should be $css");
+  # };
 
 # ok()
 
@@ -49,6 +57,12 @@ $tx = Test::XPath->new( xml => '<assets><story id="1" /><story id="2" /></assets
   $tx->ok( '//assets/story', sub {
       shift->is('./@id', ++$i, "ID should be $i in story $i");
   }, 'Should have story elements' );
+
+  # use PerlX::MethodCallWithBlock;
+  # $i = 0;
+  # $tx->ok( '//assets/story', 'Should have story elements' ) {
+  #     shift->is('./@id', ++$i, "ID should be $i in story $i");
+  # };
 
 # ok() deep atom example.
 

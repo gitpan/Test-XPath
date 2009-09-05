@@ -5,7 +5,7 @@ use 5.6.2;
 use XML::LibXML '1.69';
 use Test::Builder;
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 sub new {
     my ($class, %p) = @_;
@@ -26,6 +26,9 @@ sub ok {
     my ($self, $xpath, $code, $desc) = @_;
     my $xpc  = $self->{xpc};
     my $Test = Test::Builder->new;
+
+    # Code and desc can be reversed, to support PerlX::MethodCallWithBlock.
+    ($code, $desc) = ($desc, $code) if ref $desc eq 'CODE';
 
     if (ref $code eq 'CODE') {
         # Gonna do some recursive testing.
@@ -153,6 +156,15 @@ Test::XPath - Test XML and HTML content and structure with XPath expressions
       my $css = shift @css;
       shift->is( './@src', $css, "Style src should be $css");
   }, 'Should have style' );
+
+  # Better yet, use PerlX::MethodCallWithBlock:
+  use PerlX::MethodCallWithBlock;
+  my @css = qw(foo.css bar.css);
+  use PerlX::MethodCallWithBlock;
+  $tx->ok( '/html/head/style[@type="text/css"]', 'Should have style' ) {
+      my $css = shift @css;
+      shift->is( './@src', $css, "Style src should be $css");
+  };
 
 =head1 Description
 
@@ -384,6 +396,15 @@ something like this:
       shift->is('./@id', ++$i, "ID should be $i in story $i");
   }, 'Should have story elements' );
 
+Even better, use L<PerlX::MethodCallWithBlock|PerlX::MethodCallWithBlock>
+to pass a block to the method instead of a code reference:
+
+  use PerlX::MethodCallWithBlock;
+  my $i = 0;
+  $tx->ok( '//assets/story', 'Should have story elements' ) {
+      shift->is('./@id', ++$i, "ID should be $i in story $i");
+  };
+
 For convenience, the XML::XPath object is also assigned to C<$_> for the
 duration of the call to the code reference. Either way, you can call C<ok()>
 and pass code references anywhere in the hierarchy. For example, to ensure
@@ -530,6 +551,11 @@ XPath evaluation library.
 
 L<Test::XML::XPath|Test::XML::XPath> - Another library for testing XPath
 assertions using a functional interface. Ships with L<Test::XML|Test::XML>.
+
+=item *
+
+L<Test::HTML::Content|Test::HTML::Content> - Another module that that offers
+C<xpath_ok()> and C<no_xpath()> test functions.
 
 =back
 
