@@ -3,6 +3,7 @@
 use strict;
 use Test::Builder::Tester tests => 23;
 use Test::More;
+use File::Spec;
 
 BEGIN { use_ok 'Test::XPath' or die; }
 
@@ -19,8 +20,9 @@ $xp->ok('/html/head/title', 'whatever');
 test_test('ok works');
 
 # Try failed ok.
+my $file = File::Spec->catfile(split m{/} => __FILE__);
 test_out('not ok 1 - whatever');
-test_err(qq{#   Failed test 'whatever'\n#   at t/simple.t line 24.});
+test_err(qq{#   Failed test 'whatever'\n#   at $file line 26.});
 $xp->ok('/html/head/foo', 'whatever');
 test_test('ok fail works');
 
@@ -108,6 +110,6 @@ test_test('not_ok works');
 
 # Try failed ok.
 test_out('not ok 1 - whatever');
-test_err(qq{#   Failed test 'whatever'\n#   at t/simple.t line 112.});
+test_err(qq{#   Failed test 'whatever'\n#   at $file line 114.});
 $xp->not_ok('/html/head/title', 'whatever');
 test_test('not_ok fail works');

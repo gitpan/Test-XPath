@@ -1,31 +1,33 @@
 ---
-name: Test-XPath
-version: 0.12
-author: []
-abstract: Test XML and HTML content and structure with XPath expressions
+abstract: 'Test XML and HTML content and structure with XPath expressions'
+author:
+  - 'David E. Wheeler <david@kineticode.com>'
+build_requires:
+  Module::Build: 0.30
+  Test::More: 0.70
+configure_requires:
+  Module::Build: 0.30
+generated_by: 'Module::Build version 0.3611'
 license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Test-XPath
+provides:
+  Test::XPath:
+    file: lib/Test/XPath.pm
+    version: 0.13
+recommends:
+  HTML::Selector::XPath: 0.03
+  Test::Pod: 1.20
+  Test::Pod::Coverage: 1.06
+requires:
+  Test::Builder: 0.70
+  XML::LibXML: 1.69
+  perl: 5.006002
 resources:
   bugtracker: http://github.com/theory/test-xpath/issues/
   homepage: http://search.cpan.org/dist/Test-XPath/
   license: http://dev.perl.org/licenses/
   repository: http://github.com/theory/test-xpath/tree/
-build_requires:
-  Module::Build: 0.30
-  Test::More: 0.70
-requires:
-  Test::Builder: 0.70
-  XML::LibXML: 1.69
-  perl: 5.006002
-recommends:
-  Test::Pod: 1.20
-  Test::Pod::Coverage: 1.06
-configure_requires:
-  Module::Build: 0.30
-provides:
-  Test::XPath:
-    file: lib/Test/XPath.pm
-    version: 0.12
-generated_by: Module::Build version 0.35
-meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+version: 0.13
