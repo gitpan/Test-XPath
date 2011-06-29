@@ -5,7 +5,7 @@ use 5.6.2;
 use XML::LibXML '1.69';
 use Test::Builder;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 sub new {
     my ($class, %p) = @_;
@@ -27,7 +27,20 @@ sub new {
                     eval 'require HTML::Selector::XPath';
                     die 'Please install HTML::Selector::XPath to use CSS selectors'
                         if $@;
-                    sub { HTML::Selector::XPath::selector_to_xpath(shift) }
+                    sub {
+                        my $xpath = do {
+                            my $xp = HTML::Selector::XPath->new(shift)->to_xpath(root => '//');
+                            if (eval { $_->isa(__PACKAGE__) } && $_->node ne $doc->documentElement) {
+                                # Make it relative to the current node.
+                                $xp =~ s{^///[*]}{.};
+                            } else {
+                                # Start from the top.
+                                $xp =~ s{^///[*]}{};
+                            }
+                            $xp;
+                        };
+                        return $xpath;
+                    }
                 } else {
                     die "Unknown filter: $f\n";
                 }
@@ -42,7 +55,7 @@ sub ok {
     my ($self, $xpath, $code, $desc) = @_;
     my $xpc  = $self->{xpc};
     my $Test = Test::Builder->new;
-    $xpath   = $self->{filter}->($xpath);
+    $xpath   = $self->{filter}->($xpath, $self);
 
     # Code and desc can be reversed, to support PerlX::MethodCallWithBlock.
     ($code, $desc) = ($desc, $code) if ref $desc eq 'CODE';
@@ -76,16 +89,16 @@ sub not_ok {
     $Test->ok( !$self->{xpc}->exists($xpath, $self->{node}), $desc);
 }
 
-sub is     { Test::Builder::new->is_eq(   _findv(shift, shift), @_) }
-sub isnt   { Test::Builder::new->isnt_eq( _findv(shift, shift), @_) }
-sub like   { Test::Builder::new->like(    _findv(shift, shift), @_) }
-sub unlike { Test::Builder::new->unlike(  _findv(shift, shift), @_) }
-sub cmp_ok { Test::Builder::new->cmp_ok(  _findv(shift, shift), @_) }
+sub is     { Test::Builder::new->is_eq(   shift->find_value(shift), @_) }
+sub isnt   { Test::Builder::new->isnt_eq( shift->find_value(shift), @_) }
+sub like   { Test::Builder::new->like(    shift->find_value(shift), @_) }
+sub unlike { Test::Builder::new->unlike(  shift->find_value(shift), @_) }
+sub cmp_ok { Test::Builder::new->cmp_ok(  shift->find_value(shift), @_) }
 
 sub node   { shift->{node} }
 sub xpc    { shift->{xpc}  }
 
-sub _findv {
+sub find_value {
     my $self = shift;
     $self->{xpc}->findvalue( $self->{filter}->(shift), $self->{node} );
 }
@@ -121,7 +134,7 @@ sub _doc {
     }
 
     require Carp;
-    Carp::carp(
+    Carp::croak(
         'Test::XPath->new requires the "xml", "file", or "doc" parameter'
     );
 }
@@ -567,6 +580,19 @@ there are "email" nodes under "author" nodes that end in "@example.com" or
       'grep(//author/email, "@example[.](?:com|org)$")',
       'Should have example email'
   );
+
+=head2 Utilities
+
+=head3 C<find_value>
+
+  my $val = $tx->find_value($xpath);
+
+Returns the value returned by evaluation of the XPath expression against the
+document relative to the current node. This is the method used internally to
+fetch the value to be compared by C<is>, C<isnt>, C<like>, C<unlike>, and
+C<cmp_ok>. A simple example:
+
+  my $val = $tx->find_value('/html/head/title');
 
 =head1 See Also
 

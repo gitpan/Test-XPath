@@ -1,12 +1,17 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 55;
+use Test::More tests => 57;
 #use Test::More 'no_plan';
 use File::Spec::Functions 'catfile';
 use utf8;
 
 BEGIN { use_ok 'Test::XPath' or die; }
+
+# Try failure.
+eval { Test::XPath->new };
+like $@, qr{Test::XPath->new requires the "xml", "file", or "doc" parameter},
+    'Should get an exception for invalid params';
 
 my $xml = '<foo xmlns="http://w3.org/ex"><bar>first</bar><bar>post</bar></foo>';
 my $html = '<html><head><title>Hello</title><body><p><em><b>first</b></em></p><p><em><b>post</b></em></p></body></html>';
@@ -42,6 +47,9 @@ $xp->ok( '/html/body/p', sub {
         $_->ok('./b', 'Find b under em');
     }, 'Find em under para');
 }, 'Find paragraphs');
+
+# Make sure that find_value() works.
+is $xp->find_value('/html/head/title'), 'Hello', 'find_value should work';
 
 # Try is, like, and cmp_ok.
 $xp->is( '/html/head/title', 'Hello', 'is should work');
