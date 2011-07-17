@@ -4,7 +4,7 @@
       "David E. Wheeler <david@kineticode.com>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.110440",
+   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.110930001",
    "license" : [
       "perl_5"
    ],
@@ -33,7 +33,7 @@
          },
          "requires" : {
             "Test::Builder" : "0.70",
-            "XML::LibXML" : "1.69",
+            "XML::LibXML" : "1.70",
             "perl" : "5.006002"
          }
       }
@@ -41,7 +41,7 @@
    "provides" : {
       "Test::XPath" : {
          "file" : "lib/Test/XPath.pm",
-         "version" : "0.14"
+         "version" : "0.15"
       }
    },
    "release_status" : "stable",
@@ -57,5 +57,5 @@
          "url" : "http://github.com/theory/test-xpath/tree/"
       }
    },
-   "version" : "0.14"
+   "version" : "0.15"
 }

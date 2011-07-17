@@ -8,7 +8,7 @@ build_requires:
 configure_requires:
   Module::Build: 0.30
 dynamic_config: 1
-generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.110440'
+generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.110930001'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -17,18 +17,18 @@ name: Test-XPath
 provides:
   Test::XPath:
     file: lib/Test/XPath.pm
-    version: 0.14
+    version: 0.15
 recommends:
   HTML::Selector::XPath: 0.06
   Test::Pod: 1.20
   Test::Pod::Coverage: 1.06
 requires:
   Test::Builder: 0.70
-  XML::LibXML: 1.69
+  XML::LibXML: 1.70
   perl: 5.006002
 resources:
   bugtracker: http://github.com/theory/test-xpath/issues/
   homepage: http://search.cpan.org/dist/Test-XPath/
   license: http://dev.perl.org/licenses/
   repository: http://github.com/theory/test-xpath/tree/
-version: 0.14
+version: 0.15
